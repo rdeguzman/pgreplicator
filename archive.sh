@@ -12,7 +12,7 @@ source_file=$1
 dest_file=$2
 
 local(){
-   echo "`date`: Copying $source_file to $PGARCHIVE_DIR/$dest_file..."
+   echo "`date`: Local: Copying $source_file to $PGARCHIVE_DIR/$dest_file..."
 
    if [ -f $PGARCHIVE_DIR/$dest_file ]
    then
@@ -24,7 +24,18 @@ local(){
    fi
 }
 
-remote(){
+remote_ssh(){
+   echo "`date`: Remote SSH: Copying $source_file to $ARCHIVE_USER@$ARCHIVE_SERVER:$PGARCHIVE_DIR..."
+   scp -P $ARCHIVE_SERVER_SSH_PORT $source_file $ARCHIVE_USER@$ARCHIVE_SERVER:$PGARCHIVE_DIR
+   if [ $? -ne 0 ];then
+      echo "`date`: SCP failed"
+      exit 1
+   else
+      exit 0
+   fi
+}
+
+remote_rsync(){
    echo "Remote"
 }
 
@@ -34,7 +45,7 @@ process(){
          local
          ;;
       1)         
-         remote
+         remote_ssh
          exit 0
          ;;
       *)
