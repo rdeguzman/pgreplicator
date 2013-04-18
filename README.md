@@ -2,6 +2,10 @@
 
 The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 
+## Main Features
+- Local Archiving
+- Remote Archiving via SSH
+
 ## Quick Howto
 
 1. Clone
@@ -13,7 +17,7 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 		
 		# sh pgscripts/init.sh
 		
-3. Config
+3. Adjust configurations in config file
 
 		# cat pgscripts/config
 		PGDATA="/var/db/pgsql"
@@ -41,4 +45,41 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 5. Take a base backup
 	
 
-## Config
+##Archiving
+### Local (0)
+
+Archives WAL segments to a local directory as specified in **$ARCHIVE_DIR**
+
+### Remote via SSH (1)
+Archives WAL segments to a remote server as specified in:
+
+* $ARCHIVE_DIR
+* $ARCHIVE_USER - normally this is pgsql
+* ARCHIVE_SERVER
+* ARCHIVE_SERVER_SSH_PORT
+
+#### Passwordless SCP
+
+Note that you need to generate ssh keys across both servers so scp will not ask for a password.
+
+On the **master** server:
+
+	# su -l pgsql
+	# cd /usr/local/pgsql
+	# mkdir .ssh
+	# ssh-keygen -t rsa
+	…
+	# cp id_rsa.pub master.pub
+	# scp master.pub root@destination:/usr/local/pgsql/
+	
+On the **archive** server:
+
+	# su -l pgsql
+	# cd /usr/local/pgsql
+	# mkdir .ssh
+	# cat master.pub >> .ssh/authorized_keys
+	
+Test by copying a file from **master** to **archive** using scp
+
+	scp foo pgsql@archive_server:/usr/local/pgsql/	
+
