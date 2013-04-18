@@ -41,3 +41,4 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 5. Take a base backup
 	
 
+## Config
