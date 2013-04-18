@@ -24,10 +24,7 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 		PGBACKUP_DIR="/var/db/pgsql_backup"
 		PGARCHIVE_DIR=$PGBACKUP_DIR/archive
 		PGARCHIVE_TRIGGER_FILE=$PGBACKUP_DIR/archiving_active
-
-		# 0: local
-		# 1: remote via rsync
-		PGARCHIVE_MODE="0"
+		….
 	
 
 4. Manually edit postgresql.conf.
@@ -46,17 +43,21 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 	
 
 ##Archiving
-### Local (0)
+### Local Archiving
 
-Archives WAL segments to a local directory as specified in **$ARCHIVE_DIR**
+Archives WAL segments to a local directory as specified in
 
-### Remote via SSH (1)
+* $ARCHIVE_DIR
+* PGARCHIVE_MODE="0"
+
+### Remote Archiving via SSH
 Archives WAL segments to a remote server as specified in:
 
 * $ARCHIVE_DIR
 * $ARCHIVE_USER - normally this is pgsql
 * ARCHIVE_SERVER
 * ARCHIVE_SERVER_SSH_PORT
+* PGARCHIVE_MODE="1"
 
 #### Passwordless SCP
 
