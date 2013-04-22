@@ -1,14 +1,17 @@
 #!/bin/sh
-PGDATA="/var/db/pgsql"
-PGBACKUP_DIR="/var/db/pgsql_backup"
+PGDIR="pgsql"
+PGPARENT="/var/db"
+PGDATA=$PGPARENT/$PGDIR
+PGBACKUP_DIR=$PGPARENT/pgsql_backup
 PGARCHIVE_DIR=$PGBACKUP_DIR/archive
 PGARCHIVE_TRIGGER_FILE=$PGBACKUP_DIR/archiving_active
+PGBACKUP_FILE=`date +"%Y%m%d%H%M%S"`
 
 ARCHIVE_USER=pgsql
-ARCHIVE_SERVER=xxx.xxx.xxx.xxx
+ARCHIVE_SERVER=192.168.4.223
 ARCHIVE_SERVER_SSH_PORT=22
 
 # 0: local 
 # 1: remote via ssh
 # 2: remote via rsync
-PGARCHIVE_MODE="1" 
+PGARCHIVE_MODE="0" 
