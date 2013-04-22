@@ -35,5 +35,10 @@ tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar -C $PGBACKUP_DIR archive
 echo "Removing WAL segments from archive directory..."
 rm -Rf $PGARCHIVE_DIR/*
 
+echo "Creating recovery.conf..."
+echo "restore_command = 'cp archive/%f %p'" > recovery.conf
+echo "recovery_end_command = 'rm -R archive' " >> recovery.conf
+tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar recovery.conf
+
 echo "Compressing $PGBACKUP_DIR/$PGBACKUP_FILE.tar..."
 gzip $PGBACKUP_DIR/$PGBACKUP_FILE.tar
