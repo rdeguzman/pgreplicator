@@ -54,8 +54,7 @@ process_archive(){
 
 process_standby(){
    echo $PGSTANDBY_ENABLED
-   if [ $PGSTANDBY_ENABLED = "1" ]
-   then
+   if [ $PGSTANDBY_ENABLED = "1" ];then
       archive_ssh $STANDBY_SERVER_SSH_PORT $STANDBY_USER $STANDBY_SERVER "Standby"
    fi
 }
