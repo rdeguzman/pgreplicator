@@ -7,6 +7,8 @@ PGARCHIVE_DIR=$PGBACKUP_DIR/archive
 PGARCHIVE_TRIGGER_FILE=$PGBACKUP_DIR/archiving_active
 PGBACKUP_FILE=`date +"%Y%m%d%H%M%S"`
 
+PGTRIGGER_FILE=$PGBACKUP_DIR/postgresql.trigger.standby
+
 # 0: archive locally
 # 1: archive remote via ssh
 # 2: archive locally + archive remote via ssh
