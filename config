@@ -29,4 +29,4 @@ STANDBY_SERVER_SSH_PORT=22
 # If you want to recover, set RECOVERY_MODE
 # 0: local
 # 1: standby
-RECOVERY_MODE=0
+RECOVERY_MODE="0"
