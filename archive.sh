@@ -11,8 +11,8 @@ CONFIG=$SOURCE/$DIRNAME/config
 source_file=$1
 dest_file=$2
 
-local(){
-   echo "`date`: Local: Copying $source_file to $PGARCHIVE_DIR/$dest_file..."
+archive_locally(){
+   echo "`date`: Archive Locally: cp $source_file $PGARCHIVE_DIR/$dest_file..."
 
    if [ -f $PGARCHIVE_DIR/$dest_file ]
    then
@@ -20,33 +20,30 @@ local(){
       exit 1
    else
       cp -i $source_file $PGARCHIVE_DIR/$dest_file
-      exit 0
    fi
 }
 
-remote_ssh(){
-   echo "`date`: Remote SSH: Copying $source_file to $ARCHIVE_USER@$ARCHIVE_SERVER:$PGARCHIVE_DIR..."
+archive_ssh(){
+   echo "`date`: Archive via Remote SSH: cp $source_file $ARCHIVE_USER@$ARCHIVE_SERVER:$PGARCHIVE_DIR..."
    scp -P $ARCHIVE_SERVER_SSH_PORT $source_file $ARCHIVE_USER@$ARCHIVE_SERVER:$PGARCHIVE_DIR
    if [ $? -ne 0 ];then
       echo "`date`: SCP failed"
       exit 1
    else
-      exit 0
    fi
 }
 
-remote_rsync(){
-   echo "Remote"
-}
-
-process(){
+process_archive(){
    case "$PGARCHIVE_MODE" in
       0)
-         local
+         archive_locally
          ;;
       1)         
-         remote_ssh
-         exit 0
+         archive_ssh
+         ;;
+      2)         
+         archive_locally
+         archive_ssh
          ;;
       *)
          echo "`date`: Please set the archive mode"
@@ -60,7 +57,8 @@ then
    if [ -f $PGARCHIVE_TRIGGER_FILE ]
    then
       echo "`date`: Found $PGARCHIVE_TRIGGER_FILE. Archiving Active."
-      process
+      process_archive
+      exit 0
    else
       echo "`date`: Archiving Inactive."
       exit 0
