@@ -36,10 +36,18 @@ echo "Removing WAL segments from archive directory..."
 rm -Rf $PGARCHIVE_DIR/*
 
 echo "Creating recovery.conf..."
-echo "restore_command = 'cp archive/%f %p'" > recovery.conf
-echo "recovery_end_command = 'rm -R archive' " >> recovery.conf
-tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar recovery.conf
-rm recovery.conf
+echo "restore_command = 'cp archive/%f %p'" > recovery.local.conf
+echo "recovery_end_command = 'rm -R archive' " >> recovery.local.conf
+tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar recovery.local.conf
+rm recovery.local.conf
+
+echo "Creating recovery.standby.conf..."
+echo "standby_mode = 'on'" > recovery.standby.conf
+echo "restore_command = 'cp archive/%f %p'" >> recovery.standby.conf
+echo "archive_cleanup_command = 'pg_archivecleanup $PGARCHIVE_DIR %r'" >> recovery.standby.conf
+echo "trigger_file = '$PGTRIGGER_FILE'" >> recovery.standby.conf
+tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar recovery.standby.conf
+rm recovery.standby.conf
 
 echo "Compressing $PGBACKUP_DIR/$PGBACKUP_FILE.tar..."
 gzip $PGBACKUP_DIR/$PGBACKUP_FILE.tar
