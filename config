@@ -11,7 +11,15 @@ ARCHIVE_USER=pgsql
 ARCHIVE_SERVER=192.168.4.223
 ARCHIVE_SERVER_SSH_PORT=22
 
+STANDBY_USER=pgsql
+STANDBY_SERVER=192.168.4.223
+STANDBY_SERVER_SSH_PORT=22
+
 # 0: archive locally
 # 1: archive remote via ssh
 # 2: archive locally + archive remote via ssh
-PGARCHIVE_MODE="2" 
+PGARCHIVE_MODE="0" 
+
+# 0: disables standby
+# 1: enables standby
+PGSTANDBY_ENABLED="1" 
