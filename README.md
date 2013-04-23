@@ -40,7 +40,28 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 		# /usr/local/etc/rc.d/postgresql start
  		
 5. Take a base backup
-	
+
+		# cd /var/db/pgscripts
+		# sh base_backup.sh
+		Creating /var/db/pgsql_backup/archiving_active. Archiving active...
+		Starting basebackup...
+		 pg_start_backup |              now
+		-----------------+-------------------------------
+		 5/C3000020      | 2013-04-22 20:59:28.888374+00
+		(1 row)
+
+		Tar pgsql dir to /var/db/pgsql_backup/20130423065928.tar...
+		Stopping basebackup...
+		NOTICE:  pg_stop_backup complete, all required WAL segments have been archived
+		 pg_stop_backup |              now
+		----------------+-------------------------------
+		 5/C4000048     | 2013-04-22 21:00:16.740124+00
+		(1 row)
+
+		Removing /var/db/pgsql_backup/archiving_active. Archiving inactive...
+		Adding /var/db/pgsql_backup/archive to 20130423065928.tar
+		Removing WAL segments from archive directory...
+		Compressing /var/db/pgsql_backup/20130423065928.tar...
 
 ##Archiving
 ### Local Archiving
