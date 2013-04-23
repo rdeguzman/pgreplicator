@@ -12,6 +12,22 @@ CONFIG=$SOURCE/$DIRNAME/config
 
 BACKUPFILE=$1
 RECOVERDIR=$PGBACKUP_DIR/$BACKUPFILE
+RECOVERY_MODE=$2
+
+
+recovery_conf(){
+   case "$RECOVERY_MODE" in
+      0)
+         mv $RECOVERDIR/recovery.local.conf $RECOVERDIR/pgsql/recovery.conf
+         ;;
+      1)         
+         mv $RECOVERDIR/recovery.standby.conf $RECOVERDIR/pgsql/recovery.conf
+         ;;
+      *)
+         echo "`date`: Please set the recovery mode"
+         ;;
+   esac
+}
 
 if [ $# -eq 0 ]
 then
@@ -33,9 +49,11 @@ echo "Extracting $BACKUPFILE.tar.gz..."
 mkdir -p $RECOVERDIR
 tar -zxf $PGBACKUP_DIR/$BACKUPFILE.tar.gz -C $RECOVERDIR
 
-echo "Moving archive and recovery.conf to pgsql/..."
+echo "Moving archive to pgsql/..."
 mv $RECOVERDIR/archive $RECOVERDIR/pgsql/
-mv $RECOVERDIR/recovery.conf $RECOVERDIR/pgsql/
+
+echo "Moving recovery.conf to pgsql/..."
+recovery_conf
 
 echo "Creating pg_log and pg_xlog directories in pgsql.."
 mkdir $RECOVERDIR/pgsql/pg_xlog
@@ -53,18 +71,24 @@ mv $PGDATA $PGDATA.old
 echo "Moving $RECOVERDIR/pgsql to $PGPARENT"
 mv $RECOVERDIR/pgsql $PGPARENT/
 
-echo "------------------------------------"
-echo "Ok we are ready. Lets rock!"
-echo "Starting postgresql..."
-/usr/local/etc/rc.d/postgresql start
+if [ $RECOVERY_MODE = "0" ];then
+   echo "------------------------------------"
+   echo "Ok we are ready. Lets rock!"
+   echo "Starting postgresql..."
+   /usr/local/etc/rc.d/postgresql start
 
-if [ -f $PGDATA/recovery.done ]
-then
-   echo "Recovery done!"
-   echo "You can verify this by:"
-   echo "a. Checking for recovery.done in pgsql/"
-   echo "b. Checking for backup_label.old in pgsql/"
-   echo "c. tail -f pg_log/logfile"
+   if [ -f $PGDATA/recovery.done ]
+   then
+      echo "Recovery done!"
+      echo "You can verify this by:"
+      echo "a. Checking for recovery.done in pgsql/"
+      echo "b. Checking for backup_label.old in pgsql/"
+      echo "c. tail -f pg_log/logfile"
+   fi
+else
+   echo "------------------------------------"
+   echo "It appears that recovery is not local. You might need to edit postgresql.conf "
+   echo "and do a manual start of postgresql"
 fi
 
 exit 0;
