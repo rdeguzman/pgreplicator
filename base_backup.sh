@@ -43,7 +43,7 @@ rm recovery.local.conf
 
 echo "Creating recovery.standby.conf..."
 echo "standby_mode = 'on'" > recovery.standby.conf
-echo "restore_command = 'cp archive/%f %p'" >> recovery.standby.conf
+echo "restore_command = 'cp $PGARCHIVE_DIR/%f %p'" >> recovery.standby.conf
 echo "archive_cleanup_command = 'pg_archivecleanup $PGARCHIVE_DIR %r'" >> recovery.standby.conf
 echo "trigger_file = '$PGTRIGGER_FILE'" >> recovery.standby.conf
 tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar recovery.standby.conf
