@@ -62,6 +62,8 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 		Adding /var/db/pgsql_backup/archive to 20130423065928.tar
 		Removing WAL segments from archive directory...
 		Compressing /var/db/pgsql_backup/20130423065928.tar...
+		
+6. If you want to recover from a base backup. See Recovery below.
 
 ##Archiving
 ### Local Archiving
@@ -104,4 +106,37 @@ On the **archive** server:
 Test by copying a file from **master** to **archive** using scp
 
 	scp foo pgsql@archive_server:/usr/local/pgsql/	
+##Recovery
+1. Inspect /var/db/pgsql_backup for backup files
+
+		# ls -la /var/db/pgsql_backup
+		drwxr-xr-x   4 pgsql  pgsql        512 Apr 24 01:40 .
+		drwxr-xr-x  13 root   wheel        512 Apr 24 01:41 ..
+		-rw-r--r--   1 root   pgsql  160835646 Apr 23 06:54 20130423065321.tar.gz
+		-rw-r--r--   1 root   pgsql  160928215 Apr 23 06:56 20130423065514.tar.gz
+		-rw-r--r--   1 root   pgsql  160835728 Apr 23 07:00 20130423065928.tar.gz
+		-rw-r--r--   1 root   pgsql  158357103 Apr 23 07:24 20130423072321.tar.gz
+	
+2. Recover using a backup file
+		
+		# sh pgscripts/recover 20130423072321
+		Extracting 20130423072321.tar.gz...
+		Moving archive and recovery.conf to pgsql/...
+		Creating pg_log and pg_xlog directories in pgsql..
+		Setting permissions to pgsql for 20130423072321...
+		Stopping postgres...
+		pg_ctl: PID file "/var/db/pgsql/postmaster.pid" does not exist
+		Is server running?
+		Moving current pgsql to pgsql.old. Its good to have a backup of what happened
+		Moving /var/db/pgsql_backup/20130423072321/pgsql to /var/db
+		------------------------------------
+		Ok we are ready. Lets rock!
+		Starting postgresql...
+		pg_ctl: another server might be running; trying to start server anyway
+		Recovery done!
+		You can verify this by:
+		a. Checking for recovery.done in pgsql/
+		b. Checking for backup_label.old in pgsql/
+		c. tail -f pg_log/logfile
+		
 
