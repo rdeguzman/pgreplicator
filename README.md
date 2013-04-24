@@ -129,7 +129,7 @@ Test by copying a file from **master** to **archive** using scp
 		
 4. Recover
 
-	4.1 Locally
+	4.1 Locally. Starts postgresql automatically.
 		
 		# sh pgscripts/recover 20130423072321			
 		Extracting 20130423072321.tar.gz...
