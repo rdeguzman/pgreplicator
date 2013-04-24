@@ -117,9 +117,21 @@ Test by copying a file from **master** to **archive** using scp
 		-rw-r--r--   1 root   pgsql  160835728 Apr 23 07:00 20130423065928.tar.gz
 		-rw-r--r--   1 root   pgsql  158357103 Apr 23 07:24 20130423072321.tar.gz
 	
-2. Recover using a backup file
+2. Edit config to configure how we recover
+
+		RECOVERY_MODE=0 #local
+		RECOVERY_MODE=1 #standby
+
+
+3. Stop postgresql
 		
-		# sh pgscripts/recover 20130423072321
+		/usr/local/etc/rc.d/postgresql stop
+		
+4. Recover
+
+	4.1 Locally
+		
+		# sh pgscripts/recover 20130423072321			
 		Extracting 20130423072321.tar.gz...
 		Moving archive and recovery.conf to pgsql/...
 		Creating pg_log and pg_xlog directories in pgsql..
