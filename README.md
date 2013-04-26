@@ -2,11 +2,35 @@
 
 The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 
-## Main Features
-- Local Archiving
-- Remote Archiving via SSH
+## Prerequisites
 
-## Quick Howto
+#### Passwordless SCP
+
+Note that you need to generate ssh keys across both servers so scp will not ask for a password.
+
+On the **master** server:
+
+	# su -l pgsql
+	# cd /usr/local/pgsql
+	# mkdir .ssh
+	# ssh-keygen -t rsa
+	…
+	# cp id_rsa.pub master.pub
+	# scp master.pub root@destination:/usr/local/pgsql/
+	
+On the **archive** server:
+
+	# su -l pgsql
+	# cd /usr/local/pgsql
+	# mkdir .ssh
+	# cat master.pub >> .ssh/authorized_keys
+	
+Test by copying a file from **master** to **archive** using scp
+
+	scp foo pgsql@archive_server:/usr/local/pgsql/
+
+
+## Grab the scripts
 
 1. Clone
 
@@ -26,10 +50,29 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 		PGARCHIVE_TRIGGER_FILE=$PGBACKUP_DIR/archiving_active
 		….
 	
+## Backup Setup
 
-4. Manually edit postgresql.conf.
+### Local Archiving
 
-		# vim postgresql.conf
+Archives WAL segments to a local directory as specified in
+
+* $ARCHIVE_DIR
+* PGARCHIVE_MODE="0"
+
+### Remote Archiving via SSH
+Archives WAL segments to a remote server as specified in:
+
+* $ARCHIVE_DIR
+* $ARCHIVE_USER - normally this is pgsql
+* ARCHIVE_SERVER
+* ARCHIVE_SERVER_SSH_PORT
+* PGARCHIVE_MODE="1"
+
+### Performing a base backup
+
+1. Enable archiving
+
+		# See postgresql.master.conf
 		archive_mode = on # allows archiving to be done
 		archive_command = '../pgscripts/archive.sh %p %f'
 		archive_timeout = 30
@@ -39,7 +82,7 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
  		# /usr/local/etc/rc.d/postgresql stop
 		# /usr/local/etc/rc.d/postgresql start
  		
-5. Take a base backup
+2. Run **base_backup.sh**
 
 		# cd /var/db/pgscripts
 		# sh base_backup.sh
@@ -65,48 +108,74 @@ The scripts below are used to setup archiving in Postgres9.x on FreeBSD9.1
 		
 6. If you want to recover from a base backup. See Recovery below.
 
-##Archiving
-### Local Archiving
-
-Archives WAL segments to a local directory as specified in
-
-* $ARCHIVE_DIR
-* PGARCHIVE_MODE="0"
-
-### Remote Archiving via SSH
-Archives WAL segments to a remote server as specified in:
-
-* $ARCHIVE_DIR
-* $ARCHIVE_USER - normally this is pgsql
-* ARCHIVE_SERVER
-* ARCHIVE_SERVER_SSH_PORT
-* PGARCHIVE_MODE="1"
-
-#### Passwordless SCP
-
-Note that you need to generate ssh keys across both servers so scp will not ask for a password.
-
-On the **master** server:
-
-	# su -l pgsql
-	# cd /usr/local/pgsql
-	# mkdir .ssh
-	# ssh-keygen -t rsa
-	…
-	# cp id_rsa.pub master.pub
-	# scp master.pub root@destination:/usr/local/pgsql/
 	
-On the **archive** server:
+## Streaming Replication Setup
 
-	# su -l pgsql
-	# cd /usr/local/pgsql
-	# mkdir .ssh
-	# cat master.pub >> .ssh/authorized_keys
+### On Master Server
+
+1. Setup replication user
+
+		CREATE USER repuser SUPERUSER LOGIN CONNECTION LIMIT 1 ENCRYPTED PASSWORD 'changeme';
+
+2. Setup streaming replication parameters on master. See postgresql.master.conf
 	
-Test by copying a file from **master** to **archive** using scp
+		wal_level = hot_standby
+		max_wal_senders = 3
+		wal_keep_segments = 32
+	
+3. Start postgresql
 
-	scp foo pgsql@archive_server:/usr/local/pgsql/	
-##Recovery
+		/usr/local/etc/rc.d/postgresql start
+		
+4. Make a base backup by copying the primary server's data directory to the standby server. Use base_sync.sh
+
+		sh pgscripts/base_sync.sh
+		
+		
+### On Standby Server
+		
+1. Stop postgresql
+
+		/usr/local/etc/rc.d/postgresql stop
+		
+4. Check recover.slave.conf is in /var/db/pgsql. If not copy it.
+
+		# cp /var/db/pgscripts/recovery.slave.conf /var/db/pgsql/recovery.conf
+		# cat recovery.conf
+		...
+		standby_mode = 'on'
+		primary_conninfo = 'host=192.168.4.233 port=5432 user=repuser password=*******'
+		...
+		
+5. Check postgresql.slave.conf is in /var/db/pgsql/postgresql.conf
+
+		cp /var/db/pgscripts/postgresql.slave.conf /var/db/pgsql/postgresql.conf
+		
+	Important parameter here is enable hot_standby
+			
+		# cat postgresql.conf
+		...
+		hot_standby = on
+		...
+
+6. Start postgresql
+
+		/usr/local/etc/rc.d/postgresql start
+		
+### Monitoring Streaming Replication
+
+On Master
+
+	# select pg_current_xlog_location();
+
+On Slave
+
+	# select pg_last_xlog_receive_location();
+	# select pg_last_xlog_replay_location();		
+
+## Recovery
+
+### Recovery from a base backup
 1. Inspect /var/db/pgsql_backup for backup files
 
 		# ls -la /var/db/pgsql_backup
@@ -120,7 +189,6 @@ Test by copying a file from **master** to **archive** using scp
 2. Edit config to configure how we recover
 
 		RECOVERY_MODE=0 #local
-		RECOVERY_MODE=1 #standby
 
 
 3. Stop postgresql
@@ -129,8 +197,6 @@ Test by copying a file from **master** to **archive** using scp
 		
 4. Recover
 
-	4.1 Locally. Starts postgresql automatically.
-		
 		# sh pgscripts/recover 20130423072321			
 		Extracting 20130423072321.tar.gz...
 		Moving archive and recovery.conf to pgsql/...
@@ -150,5 +216,10 @@ Test by copying a file from **master** to **archive** using scp
 		a. Checking for recovery.done in pgsql/
 		b. Checking for backup_label.old in pgsql/
 		c. tail -f pg_log/logfile
-		
 
+## Miscelanneous		
+
+### Reset Log
+	
+	$ pg_resetxlog /var/db/pgsql
+	Transaction log reset
