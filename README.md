@@ -130,7 +130,10 @@ Archives WAL segments to a remote server as specified in:
 4. Make a base backup by copying the primary server's data directory to the standby server. Use base_sync.sh
 
 		sh pgscripts/base_sync.sh
-		
+
+5. [optional] Stop postgresql
+
+		/usr/local/etc/rc.d/postgresql stop
 		
 ### On Standby Server
 		
@@ -172,6 +175,9 @@ On Slave
 
 	# select pg_last_xlog_receive_location();
 	# select pg_last_xlog_replay_location();		
+
+   # tail -f pg_log/postgresql-test.log
+   LOG:  streaming replication successfully connected to primary
 
 ## Recovery
 
