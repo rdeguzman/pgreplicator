@@ -11,7 +11,8 @@ CONFIG=$SOURCE/$DIRNAME/config
 
 echo "Copying postgresql.slave.conf"
 mv $PGDATA/postgresql.conf $PGDATA/postgresql.conf.old
-mv $PGSCRITPS_DIR/postgresql.slave.conf $PGDATA/postgresql.conf
+cp $PGSCRIPTS_DIR/postgresql.slave.conf $PGDATA/postgresql.conf
+cp $PGSCRIPTS_DIR/recovery.slave.conf $PGDATA/recovery.conf
 
 if [ -d $PGDATA/pg_xlog ]
 then
