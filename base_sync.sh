@@ -29,4 +29,5 @@ psql -d postgres -U pgsql -c "select pg_stop_backup(), current_timestamp"
 echo "Removing $PGARCHIVE_TRIGGER_FILE. Archiving inactive..."
 rm $PGARCHIVE_TRIGGER_FILE
 
+echo "--------------IMPORTANT-------------------------"
 echo "Please run setup_standby.sh on the standby server"...

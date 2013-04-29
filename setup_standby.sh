@@ -12,6 +12,8 @@ CONFIG=$SOURCE/$DIRNAME/config
 echo "Copying postgresql.slave.conf"
 mv $PGDATA/postgresql.conf $PGDATA/postgresql.conf.old
 cp $PGSCRIPTS_DIR/postgresql.slave.conf $PGDATA/postgresql.conf
+
+echo "Copying recovery.slave.conf"
 cp $PGSCRIPTS_DIR/recovery.slave.conf $PGDATA/recovery.conf
 
 if [ -d $PGDATA/pg_xlog ]
@@ -25,3 +27,6 @@ mkdir $PGDATA/pg_xlog
 
 echo "Setting ownership to pgsql:pgsql"
 chown -Rf pgsql:pgsql $PGDATA/postgresql.conf $PGDATA/recovery.conf $PGDATA/pg_xlog
+
+echo "Change password from recovery.conf"
+grep -rn "primary_conninfo" $PGDATA/recovery.conf
