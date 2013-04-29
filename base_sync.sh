@@ -21,10 +21,15 @@ echo "Starting basebackup..."
 psql -d postgres -U pgsql -c "select pg_start_backup('pgsql_backup'), current_timestamp"
 
 echo "Sync rsync -a $PGDATA/ $STANDBY_USER@$STANDBY_SERVER:$PGDATA/ --exclude postmaster.pid --exclude pg_log"
-rsync -a $PGDATA/ root@$STANDBY_SERVER:$PGDATA/ --exclude postmaster.pid --exclude pg_log
+rsync -a $PGDATA/ root@$STANDBY_SERVER:$PGDATA/ --exclude postmaster.pid --exclude pg_log --exclude pg_xlog
+
+echo "Copying setup_standby.sh to root@$STANDBY_SERVER:$PGDATA/"
+scp $PGSCRIPTS_DIR/setup_standby.sh root@$STANDBY_SERVER:$PGDATA/
 
 echo "Stopping basebackup..."
 psql -d postgres -U pgsql -c "select pg_stop_backup(), current_timestamp"
 
 echo "Removing $PGARCHIVE_TRIGGER_FILE. Archiving inactive..."
 rm $PGARCHIVE_TRIGGER_FILE
+
+echo "Please run setup_standby.sh on the standby server"...
