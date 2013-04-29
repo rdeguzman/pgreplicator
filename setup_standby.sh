@@ -10,17 +10,17 @@ CONFIG=$SOURCE/$DIRNAME/config
 . $CONFIG
 
 echo "Copying postgresql.slave.conf"
-mv postgresql.conf postgresql.conf.old
-mv $PGSCRITPS_DIR/postgresql.slave.conf postgresql.conf
+mv $PGDATA/postgresql.conf $PGDATA/postgresql.conf.old
+mv $PGSCRITPS_DIR/postgresql.slave.conf $PGDATA/postgresql.conf
 
-if [ -d pg_xlog ]
+if [ -d $PGDATA/pg_xlog ]
 then
    echo "Removing existing pg_xlog"
-   rm -rf pg_xlog
+   rm -rf $PGDATA/pg_xlog
 fi
 
 echo "Creating pg_xlog"
-mkdir pg_xlog
+mkdir $PGDATA/pg_xlog
 
 echo "Setting ownership to pgsql:pgsql"
-chown -Rf pgsql:pgsql postgresql.conf recovery.conf pg_xlog
+chown -Rf pgsql:pgsql $PGDATA/postgresql.conf $PGDATA/recovery.conf $PGDATA/pg_xlog
