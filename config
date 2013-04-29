@@ -1,4 +1,5 @@
 #!/bin/sh
+PGSCRIPTS_DIR="/var/db/pgscripts"
 PGDIR="pgsql"
 PGPARENT="/var/db"
 PGDATA=$PGPARENT/$PGDIR
@@ -20,7 +21,7 @@ ARCHIVE_SERVER_SSH_PORT=22
 
 # 0: disables standby
 # 1: enables standby
-PGSTANDBY_ENABLED="0" 
+PGSTANDBY_ENABLED="1" 
 
 STANDBY_USER=pgsql
 STANDBY_SERVER=192.168.4.223
