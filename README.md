@@ -141,27 +141,12 @@ Archives WAL segments to a remote server as specified in:
 
 		/usr/local/etc/rc.d/postgresql stop
 		
-4. Check recover.slave.conf is in /var/db/pgsql. If not copy it.
+2. Run setup_standby.sh
 
-		# cp /var/db/pgscripts/recovery.slave.conf /var/db/pgsql/recovery.conf
-		# cat recovery.conf
-		...
-		standby_mode = 'on'
-		primary_conninfo = 'host=192.168.4.233 port=5432 user=repuser password=*******'
-		...
-		
-5. Check postgresql.slave.conf is in /var/db/pgsql/postgresql.conf
+		/var/db/pgscripts/setup_standby.sh	
 
-		cp /var/db/pgscripts/postgresql.slave.conf /var/db/pgsql/postgresql.conf
-		
-	Important parameter here is enable hot_standby
-			
-		# cat postgresql.conf
-		...
-		hot_standby = on
-		...
 
-6. Start postgresql
+3. Start postgresql
 
 		/usr/local/etc/rc.d/postgresql start
 		
