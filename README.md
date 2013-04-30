@@ -15,6 +15,9 @@ On the **master** server:
 	# mkdir .ssh
 	# ssh-keygen -t rsa
 	…
+   This will generate id_rsa and id_rsa.pub.
+   Do not remove id_rsa on master. Transfer id_rsa.pub to the destination server and
+   include it in it's authorized_keys
 	# cp id_rsa.pub master.pub
 	# scp master.pub root@destination:/usr/local/pgsql/
 	
