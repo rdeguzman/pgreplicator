@@ -152,17 +152,40 @@ Archives WAL segments to a remote server as specified in:
 		
 ### Monitoring Streaming Replication
 
-On Master
+**On Master**
 
 	# select pg_current_xlog_location();
+	
+Sample log output from master
+	
+	LOG:  database system is ready to accept connections
+	LOG:  autovacuum launcher started
+	LOG:  connection received: host=192.168.4.223 port=37522
+	LOG:  replication connection authorized: user=repuser host=192.168.4.223 port=37522
+	LOG:  connection received: host=[local]
+	LOG:  connection authorized: user=pgsql database=postgres
+	Wed May  1 05:05:34 EST 2013: Archiving Inactive.
+	Wed May  1 05:06:03 EST 2013: Found /var/db/pgsql_backup/archiving_active. Archiving Active.
+	Wed May  1 05:06:03 EST 2013: Archive Locally: cp pg_xlog/00000005000000060000007F /var/db/pgsql_backup/archive/00000005000000060000007F
+	Wed May  1 05:06:03 EST 2013: Standby via Remote SSH: cp pg_xlog/00000005000000060000007F pgsql@192.168.4.223:/var/db/pgsql_backup/archive
 
-On Slave
+
+**On Slave**
 
 	# select pg_last_xlog_receive_location();
 	# select pg_last_xlog_replay_location();		
-
-   # tail -f pg_log/postgresql-test.log
-   LOG:  streaming replication successfully connected to primary
+Sample log output from slave
+	
+	LOG:  entering standby mode
+	cp: /var/db/pgsql_backup/archive/000000050000000600000080: No such file or directory
+	LOG:  consistent recovery state reached at 6/80DE2CC0
+	LOG:  redo starts at 6/80DE2C30
+	LOG:  database system is ready to accept read only connections
+	LOG:  record with zero length at 6/80DE2CC0
+	cp: /var/db/pgsql_backup/archive/000000050000000600000080: No such file or directory
+	LOG:  streaming replication successfully connected to primary
+	LOG:  connection received: host=[local]
+	LOG:  connection authorized: user=pgsql database=postgres
 
 ## Recovery
 
