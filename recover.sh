@@ -14,17 +14,7 @@ BACKUPFILE=$1
 RECOVERDIR=$PGBACKUP_DIR/$BACKUPFILE
 
 recovery_conf(){
-   case "$RECOVERY_MODE" in
-      0)
-         mv $RECOVERDIR/recovery.local.conf $RECOVERDIR/pgsql/recovery.conf
-         ;;
-      1)         
-         mv $RECOVERDIR/recovery.standby.conf $RECOVERDIR/pgsql/recovery.conf
-         ;;
-      *)
-         echo "`date`: Please set the recovery mode"
-         ;;
-   esac
+   mv $RECOVERDIR/recovery.local.conf $RECOVERDIR/pgsql/recovery.conf
 }
 
 if [ $# -eq 0 ]
@@ -69,24 +59,14 @@ mv $PGDATA $PGDATA.old
 echo "Moving $RECOVERDIR/pgsql to $PGPARENT"
 mv $RECOVERDIR/pgsql $PGPARENT/
 
-if [ $RECOVERY_MODE = "0" ];then
-   echo "------------------------------------"
-   echo "Ok we are ready. Lets rock!"
-   echo "Starting postgresql..."
-   /usr/local/etc/rc.d/postgresql start
-
-   if [ -f $PGDATA/recovery.done ]
-   then
-      echo "Recovery done!"
-      echo "You can verify this by:"
-      echo "a. Checking for recovery.done in pgsql/"
-      echo "b. Checking for backup_label.old in pgsql/"
-      echo "c. tail -f pg_log/logfile"
-   fi
-else
-   echo "------------------------------------"
-   echo "It appears that recovery is not local. You might need to edit postgresql.conf "
-   echo "and do a manual start of postgresql"
-fi
+echo "------------------------------------"
+echo "Ok we are ready. Lets rock!"
+echo "To recover, you need to start postgresql manually. "
+echo ""
+echo "Successful recovery can be verified by:"
+echo "a. Checking for recovery.done in pgsql/"
+echo "b. Checking for backup_label.old in pgsql/"
+echo "c. tail -f pg_log/logfile"
+echo "------------------------------------"
 
 exit 0;
