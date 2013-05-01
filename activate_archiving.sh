@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/bash
 # By Rupert
 # Activates archiving by creating a file 
 

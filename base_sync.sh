@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/localbin/bash
 # By Rupert
 # Syncs a base_backup from master to standby
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/localbin/bash
 # By Rupert
 # Initializes backup directory
 DIRNAME=`dirname $0`

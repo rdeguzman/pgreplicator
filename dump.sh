@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/localbin/bash
 # Script which dumps database/s and show how many seconds it took to dump.
 
 dbs=( db1 db2 db3 )
@@ -6,7 +6,8 @@ dbs=( db1 db2 db3 )
 for db in "${dbs[@]}"
 do
    begin_time=`date +%s`
-   pg_dump --host=127.0.0.1 --port=5432 --username=pgsql --format=custom --file="./$db.backup" $db
+   #pg_dump --host=127.0.0.1 --port=5432 --username=pgsql --format=custom --file="./$db.backup" $db
+   sleep 2
    end_time=`date +%s`
 
    elapsed_time=`expr $end_time - $begin_time`

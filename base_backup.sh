@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/bash
 # By Rupert
 # Creates a compressed tar archive 20130423062540.tar.gz standalone base_backup with 
 # WAL segments (ie 20130423062540.tar.gz). Compressed base_backup has a directory structure:

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/bash
 # By Rupert
 # This script should setup a standby server by preparing postgresql.con and recovery.conf
 
