@@ -14,11 +14,14 @@ CONFIG=$SOURCE/$DIRNAME/config
 
 . $CONFIG
 
+begin_time=`date +%s`
+
 echo "Creating $PGARCHIVE_TRIGGER_FILE. Archiving active..."
 touch $PGARCHIVE_TRIGGER_FILE
 
 echo "Starting basebackup..."
 psql -d postgres -U pgsql -c "select pg_start_backup('pgsql_backup'), current_timestamp"
+
 
 echo "Tar pgsql dir to $PGBACKUP_DIR/$PGBACKUP_FILE.tar..."
 tar -c --exclude=pg_xlog --exclude=pg_log -f $PGBACKUP_DIR/$PGBACKUP_FILE.tar -C $PGPARENT $PGDIR/
@@ -42,3 +45,8 @@ rm recovery.local.conf
 
 echo "Compressing $PGBACKUP_DIR/$PGBACKUP_FILE.tar..."
 gzip $PGBACKUP_DIR/$PGBACKUP_FILE.tar
+
+end_time=`date +%s`
+elapsed_time=`expr $end_time - $begin_time`
+
+echo "Total: $elapsed_time seconds"
