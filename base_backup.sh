@@ -35,7 +35,7 @@ rm $PGARCHIVE_TRIGGER_FILE
 echo "Adding $PGARCHIVE_DIR to $PGBACKUP_FILE.tar"
 tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar -C $PGBACKUP_DIR archive
 
-echo "Removing WAL segments from archive directory..."
+#echo "Removing WAL segments from archive directory..."
 #rm -Rf $PGARCHIVE_DIR/*
 
 echo "Creating recovery.conf..."
