@@ -189,6 +189,36 @@ Sample log output from slave
 	LOG:  streaming replication successfully connected to primary
 	LOG:  connection received: host=[local]
 	LOG:  connection authorized: user=pgsql database=postgres
+	
+A good article on WAL segments http://eulerto.blogspot.com.au/2011/11/understanding-wal-nomenclature.html
+
+	CREATE OR REPLACE FUNCTION hex2int(TEXT) RETURNS bigint AS
+	$$
+	DECLARE
+	result BIGINT;
+	BEGIN
+		EXECUTE 'SELECT CAST(X'||quote_literal($1)||' AS BIGINT)' INTO result;
+		RETURN result;
+	END;
+	$$
+	LANGUAGE plpgsql;
+	
+	--
+	-- Parameters: 1 = xlog master
+	-- 2 = xlog replica
+	--
+	CREATE OR REPLACE FUNCTION pg_replication_lag_bytes(TEXT, TEXT) RETURNS bigint AS
+	$$
+		SELECT ( hex2int('FF000000') * hex2int( split_part($1, '/', 1) ) + hex2int( split_part($1, '/', 2) ) ) -
+		( hex2int('FF000000') * hex2int( split_part($2, '/', 1) ) + hex2int( split_part($2, '/', 		2) ) );
+	$$
+	LANGUAGE sql;
+	
+	# SELECT pg_replication_lag_bytes('6/A487A000', '6/A38D0000');
+	pg_replication_lag_bytes
+	------------------------
+                 	16424960
+	(1 row)
 
 ## Recovery
 
