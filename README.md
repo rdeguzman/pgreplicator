@@ -42,7 +42,7 @@ Test by copying a file from **master** to **archive** using scp
 
 2. Create initial directories
 		
-		# sh pgscripts/init.sh
+		# pgscripts/init.sh
 		
 3. Adjust configurations in config file
 
@@ -88,7 +88,7 @@ Archives WAL segments to a remote server as specified in:
 2. Run **base_backup.sh**
 
 		# cd /var/db/pgscripts
-		# sh base_backup.sh
+		# ./base_backup.sh
 		Creating /var/db/pgsql_backup/archiving_active. Archiving active...
 		Starting basebackup...
 		 pg_start_backup |              now
@@ -132,7 +132,7 @@ Archives WAL segments to a remote server as specified in:
 		
 4. Make a base backup by copying the primary server's data directory to the standby server. Use base_sync.sh
 
-		sh pgscripts/base_sync.sh
+		pgscripts/base_sync.sh
 
 5. [optional] Stop postgresql
 
@@ -160,7 +160,7 @@ Archives WAL segments to a remote server as specified in:
 
 2. Enable archiving
 
-		sh pgscripts/activate_archiving.sh
+		pgscripts/activate_archiving.sh
 	
 	
 ### Monitoring Streaming Replication
@@ -254,7 +254,7 @@ A good article on WAL segments http://eulerto.blogspot.com.au/2011/11/understand
 		
 4. Recover
 
-		# sh pgscripts/recover 20130423072321			
+		# pgscripts/recover.sh 20130423072321			
 		Extracting 20130423072321.tar.gz...
 		Moving archive and recovery.conf to pgsql/...
 		Creating pg_log and pg_xlog directories in pgsql..
