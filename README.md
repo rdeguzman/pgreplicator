@@ -153,6 +153,16 @@ Archives WAL segments to a remote server as specified in:
 
 		/usr/local/etc/rc.d/postgresql start
 		
+### On Master
+1. Start postgresql
+
+		/usr/local/etc/rc.d/postgresql start
+
+2. Enable archiving
+
+		sh pgscripts/activate_archiving.sh
+	
+	
 ### Monitoring Streaming Replication
 
 **On Master**
