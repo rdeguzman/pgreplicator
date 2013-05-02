@@ -93,23 +93,37 @@ Archives WAL segments to a remote server as specified in:
 		Starting basebackup...
 		 pg_start_backup |              now
 		-----------------+-------------------------------
-		 5/C3000020      | 2013-04-22 20:59:28.888374+00
+		 6/BA000020      | 2013-05-01 19:00:29.932488+00
 		(1 row)
 
-		Tar pgsql dir to /var/db/pgsql_backup/20130423065928.tar...
+		Tar pgsql dir to /var/db/pgsql_backup/20130502050029.tar...
 		Stopping basebackup...
 		NOTICE:  pg_stop_backup complete, all required WAL segments have been archived
 		 pg_stop_backup |              now
 		----------------+-------------------------------
-		 5/C4000048     | 2013-04-22 21:00:16.740124+00
+		 6/BB000048     | 2013-05-01 19:01:22.096923+00
 		(1 row)
 
-		Removing /var/db/pgsql_backup/archiving_active. Archiving inactive...
-		Adding /var/db/pgsql_backup/archive to 20130423065928.tar
+		Adding /var/db/pgsql_backup/archive to 20130502050029.tar
 		Removing WAL segments from archive directory...
-		Compressing /var/db/pgsql_backup/20130423065928.tar...
+		Creating recovery.conf...
+		Compressing /var/db/pgsql_backup/20130502050029.tar...
+		Total: 90 seconds
 		
-6. If you want to recover from a base backup. See Recovery below.
+3. You can verify the contents of the base_backup
+		
+		tar -vtf 20130502050029.tar.gz
+		...
+		-rw-------  0 pgsql  pgsql      8192 Apr  8 00:13 pgsql/global/11753_vm
+		-rw-------  0 pgsql  pgsql     24576 Apr  8 00:13 pgsql/global/11753_fsm
+		drwxr-xr-x  0 pgsql  pgsql         0 May  2 05:01 archive/
+		-rw-------  0 pgsql  pgsql  16777216 May  2 05:00 archive/0000000500000006000000B9
+		-rw-------  0 pgsql  pgsql  16777216 May  2 05:01 archive/0000000500000006000000BA
+		-rw-------  0 pgsql  pgsql       248 May  2 05:01 archive/0000000500000006000000BA.00000020.backup
+		-rw-------  0 pgsql  pgsql  16777216 May  2 05:01 archive/0000000500000006000000BB
+		-rw-r--r--  0 root   wheel        76 May  2 05:01 recovery.local.conf
+		
+4. If you want to recover from a base backup. See Recovery below.
 
 	
 ## Streaming Replication Setup
