@@ -36,7 +36,7 @@ echo "Removing WAL segments from archive directory..."
 #rm -Rf $PGARCHIVE_DIR/*
 
 echo "Creating recovery.conf..."
-cp $PGSCRIPTS_DIR/recovery.local.conf .
+cp $PGCONF_DIR/recovery.local.conf .
 tar -rf $PGBACKUP_DIR/$PGBACKUP_FILE.tar recovery.local.conf
 rm recovery.local.conf
 
