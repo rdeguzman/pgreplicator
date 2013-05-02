@@ -29,7 +29,6 @@ archive_ssh(){
    if [ $? -ne 0 ];then
       echo "`date`: SCP failed"
       exit 1
-   else
    fi
 }
 
