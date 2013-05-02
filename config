@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 PGSCRIPTS_DIR="/var/db/pgscripts"
 PGDIR="pgsql"
 PGPARENT="/var/db"

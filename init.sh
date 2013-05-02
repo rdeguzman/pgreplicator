@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 DIRNAME=`dirname $0`
 SOURCE=`pwd`
 CONFIG=$SOURCE/$DIRNAME/config

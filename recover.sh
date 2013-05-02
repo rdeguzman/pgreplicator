@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # By Rupert
 # Recovers from a standalone base_backup (20130423062540.tar.gz)
 # from the recovery dir (/var/db/pgsql_backup/)

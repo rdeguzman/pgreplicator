@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # By Rupert
 # Creates a standalone base_backup and WAL segments into 20130423062540.tar.gz
 # The compressed base backup has a directory structure of

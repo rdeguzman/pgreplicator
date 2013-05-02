@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # By Rupert
 # This script should run on a standby server only
 

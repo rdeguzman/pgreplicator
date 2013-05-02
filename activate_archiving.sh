@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # By Rupert
 # Archive script to check for existence of archive directory, archive_active file, archive files
 
