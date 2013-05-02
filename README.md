@@ -38,15 +38,15 @@ Test by copying a file from **master** to **archive** using scp
 1. Clone
 
 		# cd /var/db
-		# git clone https://github.com/rdeguzman/pgscripts.git
+		# git clone https://github.com/rdeguzman/pgreplicator.git
 
 2. Create initial directories
 		
-		# pgscripts/init.sh
+		# pgreplicator/init.sh
 		
 3. Adjust configurations in config file
 
-		# cat pgscripts/config
+		# cat pgreplicator/config
 		PGDATA="/var/db/pgsql"
 		PGBACKUP_DIR="/var/db/pgsql_backup"
 		PGARCHIVE_DIR=$PGBACKUP_DIR/archive
@@ -77,7 +77,7 @@ Archives WAL segments to a remote server as specified in:
 
 		# See postgresql.master.conf
 		archive_mode = on # allows archiving to be done
-		archive_command = '../pgscripts/archive.sh %p %f'
+		archive_command = '../pgreplicator/archive.sh %p %f'
 		archive_timeout = 30
 		
  	Change requires a postgresql restart
@@ -87,7 +87,7 @@ Archives WAL segments to a remote server as specified in:
  		
 2. Run **base_backup.sh**
 
-		# cd /var/db/pgscripts
+		# cd /var/db/pgreplicator
 		# ./base_backup.sh
 		Creating /var/db/pgsql_backup/archiving_active. Archiving active...
 		Starting basebackup...
@@ -146,7 +146,7 @@ Archives WAL segments to a remote server as specified in:
 		
 4. Make a base backup by copying the primary server's data directory to the standby server. Use base_sync.sh
 
-		pgscripts/base_sync.sh
+		pgreplicator/base_sync.sh
 
 5. [optional] Stop postgresql
 
@@ -160,7 +160,7 @@ Archives WAL segments to a remote server as specified in:
 		
 2. Run setup_standby.sh
 
-		/var/db/pgscripts/setup_standby.sh	
+		/var/db/pgreplicator/setup_standby.sh	
 
 
 3. Start postgresql
@@ -174,7 +174,7 @@ Archives WAL segments to a remote server as specified in:
 
 2. Enable archiving
 
-		pgscripts/activate_archiving.sh
+		pgreplicator/activate_archiving.sh
 	
 	
 ### Monitoring Streaming Replication
@@ -268,7 +268,7 @@ A good article on WAL segments http://eulerto.blogspot.com.au/2011/11/understand
 		
 4. Recover
 
-		# pgscripts/recover.sh 20130423072321			
+		# pgreplicator/recover.sh 20130423072321			
 		Extracting 20130423072321.tar.gz...
 		Moving archive and recovery.conf to pgsql/...
 		Creating pg_log and pg_xlog directories in pgsql..
