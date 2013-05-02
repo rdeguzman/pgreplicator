@@ -1,11 +1,6 @@
 #!/bin/bash
 # By Rupert
-# Creates a standalone base_backup and WAL segments into 20130423062540.tar.gz
-# The compressed base backup has a directory structure of
-#
-# 20130423062540.tar.gz
-#  pgsql/
-#  archive/ 
+# Syncs a base_backup from master to standby
 
 # Include directory paths from config file
 DIRNAME=`dirname $0`

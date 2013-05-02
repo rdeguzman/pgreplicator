@@ -1,4 +1,6 @@
 #!/bin/bash
+# By Rupert
+# Initializes backup directory
 DIRNAME=`dirname $0`
 SOURCE=`pwd`
 CONFIG=$SOURCE/$DIRNAME/config

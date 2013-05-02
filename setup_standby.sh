@@ -1,6 +1,6 @@
 #!/bin/bash
 # By Rupert
-# This script should run on a standby server only
+# This script should setup a standby server by preparing postgresql.con and recovery.conf
 
 # Include directory paths from config file
 DIRNAME=`dirname $0`

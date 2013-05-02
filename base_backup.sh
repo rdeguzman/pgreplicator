@@ -1,7 +1,7 @@
 #!/bin/bash
 # By Rupert
-# Creates a standalone base_backup and WAL segments into 20130423062540.tar.gz
-# The compressed base backup has a directory structure of
+# Creates a compressed tar archive 20130423062540.tar.gz standalone base_backup with 
+# WAL segments (ie 20130423062540.tar.gz). Compressed base_backup has a directory structure:
 #
 # 20130423062540.tar.gz
 #  pgsql/

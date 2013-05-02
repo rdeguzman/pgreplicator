@@ -1,6 +1,6 @@
 #!/bin/bash
 # By Rupert
-# Archive script to check for existence of archive directory, archive_active file, archive files
+# Activates archiving by creating a file 
 
 # Include directory paths from config file
 DIRNAME=`dirname $0`

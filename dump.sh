@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script that dump the database and show how many seconds it took
+# Script which dumps database/s and show how many seconds it took to dump.
 
 dbs=( db1 db2 db3 )
 
