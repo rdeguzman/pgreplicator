@@ -57,7 +57,7 @@ mkdir $RECOVERDIR/pgsql/pg_xlog
 mkdir $RECOVERDIR/pgsql/pg_log
 
 echo "Setting permissions to pgsql for $BACKUPFILE..."
-chown -Rf pgsql:pgsql $RECOVERDIR/pgsql
+chown -Rf ${PGUSER}:${PGGROUP} $RECOVERDIR/pgsql
 
 echo "Stopping postgres..."
 ${PGINIT} stop

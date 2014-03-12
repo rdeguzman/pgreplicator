@@ -26,7 +26,7 @@ echo "Creating pg_xlog"
 mkdir $PGDATA/pg_xlog
 
 echo "Setting ownership to pgsql:pgsql"
-chown -Rf pgsql:pgsql $PGDATA/postgresql.conf $PGDATA/recovery.conf $PGDATA/pg_xlog
+chown -Rf ${PGUSER}:${PGGROUP} $PGDATA/postgresql.conf $PGDATA/recovery.conf $PGDATA/pg_xlog
 
 echo "Change password from recovery.conf"
 grep -rn "primary_conninfo" $PGDATA/recovery.conf
