@@ -27,3 +27,14 @@ PGSTANDBY_ENABLED="1"
 STANDBY_USER=pgsql
 STANDBY_SERVER=192.168.4.223
 STANDBY_SERVER_SSH_PORT=22
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+   PGUSER="postgres"
+	PGGROUP="postgres"
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+	PGUSER="pgsql"
+	PGGROUP="pgsql"
+else
+	PGUSER="pgsql"
+	PGGROUP="pgsql"
+fi
