@@ -1,4 +1,4 @@
-#!/usr/localbin/bash
+#!/usr/bin/env bash
 # Script which dumps database/s and show how many seconds it took to dump.
 
 dbs=( db1 db2 db3 )

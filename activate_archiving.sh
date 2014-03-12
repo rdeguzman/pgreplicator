@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 # By Rupert
 # Activates archiving by creating a file 
 

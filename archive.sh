@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 # By Rupert
 # Archive script to check for existence of archive directory, archiving_active file, and archive files
 

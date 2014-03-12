@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 # By Rupert
 # Syncs a base_backup from master to standby
 

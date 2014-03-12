@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 # By Rupert
 # Creates a compressed tar archive 20130423062540.tar.gz standalone base_backup with 
 # WAL segments (ie 20130423062540.tar.gz). Compressed base_backup has a directory structure:
@@ -24,7 +24,7 @@ psql -d postgres -U pgsql -c "select pg_start_backup('pgsql_backup'), current_ti
 
 
 echo "Tar pgsql dir to $PGBACKUP_DIR/$PGBACKUP_FILE.tar..."
-tar -c --exclude=pg_xlog --exclude=pg_log -f $PGBACKUP_DIR/$PGBACKUP_FILE.tar -C $PGPARENT $PGDIR/
+tar -c --exclude=pg_xlog --exclude=pg_log -f $PGBACKUP_DIR/$PGBACKUP_FILE.tar -C $PGPARENT $PGDATA/
 
 echo "Stopping basebackup..."
 psql -d postgres -U pgsql -c "select pg_stop_backup(), current_timestamp"
