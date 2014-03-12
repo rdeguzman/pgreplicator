@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 # By Rupert
 # Recovers from a standalone base_backup (20130423062540.tar.gz)
 # from the recovery dir (/var/db/pgsql_backup/)
@@ -6,9 +6,18 @@
 # Include directory paths from config file
 DIRNAME=`dirname $0`
 SOURCE=`pwd`
+
 CONFIG=$SOURCE/$DIRNAME/config
 
 . $CONFIG
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+	PGINIT=/etc/init.d/postgresql
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+	PGINIT=/usr/local/etc/rc.d/postgresql
+else
+	PGINIT=/usr/local/etc/rc.d/postgresql
+fi
 
 BACKUPFILE=$1
 RECOVERDIR=$PGBACKUP_DIR/$BACKUPFILE
@@ -51,7 +60,7 @@ echo "Setting permissions to pgsql for $BACKUPFILE..."
 chown -Rf pgsql:pgsql $RECOVERDIR/pgsql
 
 echo "Stopping postgres..."
-/usr/local/etc/rc.d/postgresql stop
+${PGINIT} stop
 
 echo "Moving current pgsql to pgsql.old. Its good to have a backup of what happened"
 mv $PGDATA $PGDATA.old
