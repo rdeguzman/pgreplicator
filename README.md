@@ -39,14 +39,15 @@ Test by copying a file from **master** to **archive** using scp
 
 		# cd /var/db
 		# git clone https://github.com/rdeguzman/pgreplicator.git
+		# mv pgreplicator pgscripts
 
 2. Create initial directories
 		
-		# pgreplicator/init.sh
+		# pgscripts/init.sh
 		
 3. Adjust configurations in config file
 
-		# cat pgreplicator/config
+		# cat pgscripts/config
 		PGDATA="/var/db/pgsql"
 		PGBACKUP_DIR="/var/db/pgsql_backup"
 		PGARCHIVE_DIR=$PGBACKUP_DIR/archive
