@@ -298,6 +298,7 @@ A good article on WAL segments http://eulerto.blogspot.com.au/2011/11/understand
 
 ## Contributors
 
+ - Ruperto De Guzman
  - Graham Dunn
 
 
